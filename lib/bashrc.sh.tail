@@ -1,0 +1,3 @@
+# Export PATH so it contains reference to BINPAT dirs.
+export PATH=$PATH:${BINPAT_BIN}:${BINPAT_STO}/mounts:${BINPAT_STO}/bindir
+
