@@ -8,46 +8,40 @@
 #ifndef _DFA_H_
 #define _DFA_H_ 1
 
-// DFA Delta
-
-struct _dfa_delta_priv_t;
-typedef struct _dfa_delta_priv_t dfa_delta_priv_t;
-
-typedef struct
-{
-	dfa_delta_priv_t * _priv;
-	
-	size_t first_id;
-	size_t * delta;
-}
-dfa_delta_t;
-
-dfa_delta_t *
-        dfa_delta_alloc (size_t nstates, size_t nsyms);
-
-#define dfa_delta_first(obj) \
-        obj->first
-#define dfa_delta(obj, x, y) \
-        obj->delta[x][y]
-
-size_t  dfa_delta_get_states_count (dfa_delta_t * self);
-size_t  dfa_delta_get_symbols_count (dfa_delta_t * self);
-
-void    dfa_delta_free (dfa_delta_t * self);
-void    dfa_delta_clean (dfa_delta_t ** self);
+#include <stdlib.h>
+#include <stdbool.h>
 
 // DFA
 
 struct _dfa_t;
 typedef struct _dfa_t dfa_t;
 
-dfa_t * dfa_alloc (dfa_delta_t * dt);
+dfa_t * dfa_alloc (size_t n_syms);
 
-void    dfa_push (dfa_t * self, size_t sym_id);
-size_t  dfa_get_state (dfa_t * self);
+void    dfa_set (dfa_t * self, size_t state_id, size_t * dest);
+size_t  dfa_get (dfa_t * self, size_t state_id, size_t sym_id);
 
-void    dfa_free  (dfa_t * self);
+size_t  dfa_get_n_state (dfa_t * self);
+size_t  dfa_get_n_symbol (dfa_t * self);
+
+bool    dfa_verify (dfa_t * self);
+
+void    dfa_free (dfa_t * self);
 void    dfa_clean (dfa_t ** self);
+
+// DFA Exec
+
+struct _dfa_exec_t;
+typedef struct _dfa_exec_t dfa_exec_t;
+
+dfa_exec_t *
+        dfa_exec_alloc (dfa_t * dfa, size_t initial);
+
+void    dfa_exec_push (dfa_exec_t * self, size_t sym_id);
+size_t  dfa_exec_get_state (dfa_exec_t * self);
+
+void    dfa_exec_free  (dfa_exec_t * self);
+void    dfa_exec_clean (dfa_exec_t ** self);
 
 #endif
 
