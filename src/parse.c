@@ -199,6 +199,23 @@ parse_load (parse_t * self, FILE * input)
 	free (ic);
 }
 
+size_t
+parse_get_first_id (parse_t * self)
+{
+	assert (self != NULL);
+	
+	return self->first_id;
+}
+
+char
+parse_get_flags (parse_t * self, size_t id)
+{
+	assert (self != NULL);
+	assert (id < self->n_state);
+	
+	return self->flags[id];
+}
+
 char *
 parse_get_state (parse_t * self, size_t id)
 {
