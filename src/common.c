@@ -176,7 +176,7 @@ index_alloc_pair (size_t id)
 }
 
 static index_pair_t *
-index_find_pair (index_t * self, size_t hash_val, char * value)
+index_find_pair (index_t * self, size_t hash_val, char * value, bool n_creat)
 {
 	assert (self != NULL);
 	assert (value != NULL);
@@ -198,7 +198,7 @@ index_find_pair (index_t * self, size_t hash_val, char * value)
 		}
 	}
 	
-	if (loop)
+	if (loop && n_creat)
 	{
 		size_t id = vector_get_size (self->data);
 		vector(self->data, id, char *) = strdup (value);
@@ -235,9 +235,25 @@ index_get (index_t * self, char * value)
 	assert (value != NULL);
 	
 	size_t hash_value = (size_t) (index_hash (value) % self->cap);
-	index_pair_t * ip = index_find_pair (self, hash_value, value);
+	index_pair_t * ip = index_find_pair (self, hash_value, value, true);
 	
 	return ip->id;
+}
+
+bool
+index_peek (index_t * self, char * value, size_t * out)
+{
+	assert (self != NULL);
+	assert (value != NULL);
+	assert (out != NULL);
+	
+	size_t hash_value = (size_t) (index_hash (value) % self->cap);
+	index_pair_t * ip = index_find_pair (self, hash_value, value, false);
+	
+	bool ret = ip != NULL;
+	if (ret) *out = ip->id;
+	
+	return ret;
 }
 
 static void

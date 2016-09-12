@@ -9,6 +9,7 @@
 #define _COMMON_H_ 1
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 // Vector
 
@@ -44,6 +45,7 @@ index_t *
 size_t  index_get_size (index_t * self);
 
 size_t  index_get (index_t * self, char * val);
+bool    index_peek (index_t * self, char * value, size_t * out);
 
 char ** index_release (index_t * self);
 
