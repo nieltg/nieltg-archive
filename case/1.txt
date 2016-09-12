@@ -1,0 +1,15 @@
+		L	R
+	RRR	LLR*	RRL*
+*	RLL*	LRL 	RRR 
+	LRL 	RRL*	LLR*
+*	RRL*	LLL*	RLR*
+>	LLL 	RLL 	LRR 
+	LRR 	RRR*	LRL*
+*	LRL*	RRL*	LLR*
+*	LLL*	RLL 	LRR 
+*	LLR*	RLR*	LLL*
+*	RRR*	LLR*	RRL*
+	RLL 	LRL 	RRR 
+*	RLR*	LRR*	RLL*
+*	LRR*	RRR*	LRL*
+
