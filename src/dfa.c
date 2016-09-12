@@ -169,7 +169,7 @@ dfa_exec_free (dfa_exec_t * self)
 {
 	if (self != NULL)
 	{
-		dfa_clean (&self->dfa);
+		self->dfa = NULL;
 		
 		free (self);
 	}
