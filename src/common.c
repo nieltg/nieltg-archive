@@ -265,11 +265,14 @@ index_free_pairs (index_t * self)
 	for (size_t i = 0; i < self->cap; i++)
 	{
 		index_pair_t * ip = self->index[i];
-	
+		index_pair_t * ic;
+		
 		while (ip != NULL)
 		{
+			ic = ip;
+			
 			ip = ip->next;
-			free (ip);
+			free (ic);
 		}
 		
 		self->index[i] = NULL;
