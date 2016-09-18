@@ -70,12 +70,20 @@ vector_get_size (vector_t * self)
 	return self->size;
 }
 
+bool
+vector_is_elmt_id (vector_t * self, size_t id)
+{
+	assert (self != NULL);
+	
+	return id < self->size;
+}
+
 void * vector_id (vector_t * self, size_t id)
 {
 	assert (self != NULL);
 	
-	size_t nsi = id + 1;
-	self->size = (nsi > self->size) ? nsi : self->size;
+	if (!vector_is_elmt_id (self, id))
+		self->size = id + 1;
 	
 	if (self->size > self->cap)
 	{
@@ -172,6 +180,18 @@ index_get_size (index_t * self)
 	assert (self != NULL);
 	
 	return vector_get_size (self->data);
+}
+
+char *
+index_get_by_id (index_t * self, size_t id)
+{
+	assert (self != NULL);
+	void * ph;
+	
+	if (vector_is_elmt_id (self->data, id))
+		return vector(self->data, id, char *);
+	else
+		return NULL;
 }
 
 static index_pair_t *

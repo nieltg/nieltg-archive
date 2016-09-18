@@ -21,6 +21,8 @@ vector_t *
 
 size_t  vector_get_size (vector_t * self);
 
+bool    vector_is_elmt_id (vector_t * self, size_t id);
+
 #define vector(self, id, type) \
         *((type *) vector_id (self, id))
 #define vector_next(self, type) \
@@ -43,6 +45,8 @@ index_t *
         index_alloc ();
 
 size_t  index_get_size (index_t * self);
+
+char *  index_get_by_id (index_t * self, size_t id);
 
 size_t  index_get (index_t * self, char * val);
 bool    index_peek (index_t * self, char * value, size_t * out);
