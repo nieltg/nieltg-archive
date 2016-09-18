@@ -67,6 +67,7 @@ process_sym (parse_t * self, char * buf)
 		tok = strtok_r (NULL, TOKEN_WS, &tok_buf);
 	}
 	
+	index_free (self->map_sym);
 	self->map_sym = map;
 }
 
@@ -215,6 +216,14 @@ parse_get_flags (parse_t * self, size_t id)
 	assert (id < self->n_state);
 	
 	return self->flags[id];
+}
+
+size_t
+parse_get_n_state (parse_t * self)
+{
+	assert (self != NULL);
+	
+	return self->n_state;
 }
 
 char *
