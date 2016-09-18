@@ -1,12 +1,12 @@
-		1000	5000	10000
->	0k	1kf	5kf	10kf
-*	1kf	2k	6k	inf
-	2k	3k	inf	inf
-*	3k	4k	inf	inf
-*	4k	5k	inf	inf
-	5k	6k	inf	inf
-*	5kf	6k	inf	inf
-*	6k	inf	inf	inf
-*	10kf	inf	inf	inf
-	inf	inf	inf	inf
-
+		1000	2000	5000	10000
+>	0k	1k	2k-tukar	5k-tukar	10k-tukar
+	1k	2k	3k	6k	inf
+	2k	3k	4k	inf	inf
+*	2k-tukar	3k	4k	inf	inf
+*	3k	4k	5k	inf	inf
+*	4k	5k	6k	inf	inf
+	5k	6k	inf	inf	inf
+*	5k-tukar	6k	inf	inf	inf
+*	6k	inf	inf	inf	inf
+*	10k-tukar	inf	inf	inf	inf
+	inf	inf	inf	inf	inf
