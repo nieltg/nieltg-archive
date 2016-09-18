@@ -16,11 +16,31 @@
 #include "dfa.h"
 
 static void
-print_syms (parse_t * parse)
+print_header (parse_t * parse)
 {
+	size_t len;
+	
+	// States
+	
+	printf ("\nStates : ");
+	
+	len = parse_get_n_state (parse);
+	
+	if (len > 0)
+	{
+		printf ("%s", parse_get_state (parse, 0));
+		
+		for (size_t i = 1; i < len; i++)
+			printf (", %s", parse_get_state (parse, i));
+	}
+	else
+		printf ("(no state)");
+	
+	// Symbols
+	
 	printf ("\nSymbols: ");
 	
-	size_t len = parse_get_n_symbol (parse);
+	len = parse_get_n_symbol (parse);
 	
 	if (len > 0)
 	{
@@ -162,7 +182,7 @@ main (int argc, char ** argv)
 			size_t fi = parse_get_first_id (parse);
 			dfa_exec_t * dx = dfa_exec_alloc (dfa, fi);
 			
-			print_syms (parse);
+			print_header (parse);
 			
 			printf ("Initial: ");
 			print_state (parse, dx);
