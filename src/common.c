@@ -78,7 +78,8 @@ vector_is_elmt_id (vector_t * self, size_t id)
 	return id < self->size;
 }
 
-void * vector_id (vector_t * self, size_t id)
+void *
+vector_id (vector_t * self, size_t id)
 {
 	assert (self != NULL);
 	
@@ -94,7 +95,8 @@ void * vector_id (vector_t * self, size_t id)
 	return self->data + (self->elmt * id);
 }
 
-void vector_compact (vector_t * self)
+void
+vector_compact (vector_t * self)
 {
 	assert (self != NULL);
 	
@@ -105,7 +107,8 @@ void vector_compact (vector_t * self)
 	}
 }
 
-void * vector_release (vector_t * self)
+void *
+vector_release (vector_t * self)
 {
 	assert (self != NULL);
 	
@@ -120,7 +123,8 @@ void * vector_release (vector_t * self)
 	return data;
 }
 
-void vector_free (vector_t * self)
+void
+vector_free (vector_t * self)
 {
 	if (self != NULL)
 	{
@@ -131,7 +135,8 @@ void vector_free (vector_t * self)
 	}
 }
 
-void vector_clean (vector_t ** self)
+void
+vector_clean (vector_t ** self)
 {
 	assert (self != NULL);
 	
