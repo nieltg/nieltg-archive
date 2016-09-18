@@ -27,14 +27,24 @@ struct _vector_t
 };
 
 static void
-vector_adjust (vector_t * self)
+vector_adjust (vector_t * self, int cap)
 {
 	assert (self != NULL);
 	
-	if (self->cap > 0)
-		self->data = (void **) realloc (self->data, self->cap * self->elmt);
+	if (cap > 0)
+	{
+		self->data = (void *) realloc (self->data, cap * self->elmt);
+		
+		if (cap > self->cap)
+		{
+			void * data = self->data + (self->cap * self->elmt);
+			memset (data, 0, (cap - self->cap) * self->elmt);
+		}
+	}
 	else
 		self->data = NULL;
+	
+	self->cap = cap;
 }
 
 vector_t *
@@ -69,8 +79,8 @@ void * vector_id (vector_t * self, size_t id)
 	
 	if (self->size > self->cap)
 	{
-		self->cap = ((self->size / self->incr) + 1) * self->incr;
-		vector_adjust (self);
+		size_t cap = ((self->size / self->incr) + 1) * self->incr;
+		vector_adjust (self, cap);
 	}
 	
 	return self->data + (self->elmt * id);
@@ -82,8 +92,8 @@ void vector_compact (vector_t * self)
 	
 	if (self->cap != self->size)
 	{
-		self->cap = self->size;
-		vector_adjust (self);
+		size_t cap = self->size;
+		vector_adjust (self, cap);
 	}
 }
 
