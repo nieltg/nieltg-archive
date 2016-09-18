@@ -14,8 +14,10 @@ OBJS := $(addprefix $(OBJ_DIR)/, common.o dfa.o main.o parse.o)
 
 # Tools
 
-LD := gcc
-CC := gcc -std=gnu99 -c
+CC_ARG := -Wall $(if $(DEBUG),-ggdb,)
+
+LD := gcc $(CC_ARG)
+CC := gcc $(CC_ARG) -std=gnu99 -c
 
 APP := dfaexec
 
