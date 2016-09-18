@@ -186,7 +186,6 @@ char *
 index_get_by_id (index_t * self, size_t id)
 {
 	assert (self != NULL);
-	void * ph;
 	
 	if (vector_is_elmt_id (self->data, id))
 		return vector(self->data, id, char *);
