@@ -37,8 +37,8 @@ parse_alloc (void)
 {
 	parse_t * self = (parse_t *) malloc (sizeof (parse_t));
 	
-	self->map_sym = NULL;
-	self->map_state = NULL;
+	self->map_sym = index_alloc ();
+	self->map_state = index_alloc ();
 	self->flags = NULL;
 	
 	self->first_id = 0;
@@ -55,16 +55,14 @@ process_sym (parse_t * self, char * buf)
 	char * tok_buf;
 	char * tok = strtok_r (buf, TOKEN_WS, &tok_buf);
 	
-	index_t * map = index_alloc ();
+	index_t * map = self->map_sym;
+	index_reset (map);
 	
 	while (tok != NULL)
 	{
 		index_get (map, tok);
 		tok = strtok_r (NULL, TOKEN_WS, &tok_buf);
 	}
-	
-	index_free (self->map_sym);
-	self->map_sym = map;
 }
 
 static size_t
@@ -95,9 +93,11 @@ process_delta_row (char * buf, int n_max, char ** row)
 }
 
 static void
-process_delta (parse_t * self, index_t * db_id, vector_t * db_f, size_t * dst_b,
+process_delta (parse_t * self, vector_t * db_f, size_t * dst_b,
                char * attr, char * key, char ** dst)
 {
+	index_t * db_id = self->map_state;
+	
 	size_t key_id = index_get (db_id, key);
 	unsigned char flags = 0;
 	
@@ -167,26 +167,23 @@ parse_load (parse_t * self, FILE * input)
 	char ** row = (char **) malloc (n_max * sizeof (char *));
 	size_t * ic = (size_t *) malloc (n_sym * sizeof (size_t));
 	
-	index_t * db_id = index_alloc ();
 	vector_t * db_flag = vector_alloc (sizeof (char));
+	index_reset (self->map_state);
 	
 	while (getline (&buf, &bsi, input) != -1)
 	{
 		size_t n = process_delta_row (buf, n_max, row);
 		
 		if (n == n_par)
-			process_delta (self, db_id, db_flag, ic, NULL, row[0], &row[1]);
+			process_delta (self, db_flag, ic, NULL, row[0], &row[1]);
 		else
 		if (n == n_max)
-			process_delta (self, db_id, db_flag, ic, row[0], row[1], &row[2]);
+			process_delta (self, db_flag, ic, row[0], row[1], &row[2]);
 		else
 		if (n != 0)
 			fprintf (stderr, "%s: warning: Ignoring incompatible data in row\n",
 			         program_invocation_short_name);
 	}
-	
-	index_free (self->map_state);
-	self->map_state = db_id;
 	
 	self->flags = (char *) vector_release (db_flag);
 	vector_clean (&db_flag);
@@ -217,7 +214,7 @@ parse_get_n_state (parse_t * self)
 {
 	assert (self != NULL);
 	
-	return self->n_state;
+	return index_get_size (self->map_state);
 }
 
 char *
