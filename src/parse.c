@@ -209,14 +209,6 @@ parse_get_flags (parse_t * self, size_t id)
 	return self->flags[id];
 }
 
-size_t
-parse_get_n_state (parse_t * self)
-{
-	assert (self != NULL);
-	
-	return index_get_size (self->map_state);
-}
-
 char *
 parse_get_state (parse_t * self, size_t id)
 {
@@ -224,14 +216,6 @@ parse_get_state (parse_t * self, size_t id)
 	assert (id < index_get_size (self->map_state));
 	
 	return index_get_by_id (self->map_state, id);
-}
-
-size_t
-parse_get_n_symbol (parse_t * self)
-{
-	assert (self != NULL);
-	
-	return index_get_size (self->map_sym);
 }
 
 char *
