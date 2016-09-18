@@ -226,6 +226,14 @@ parse_get_state (parse_t * self, size_t id)
 	return self->state[id];
 }
 
+size_t
+parse_get_n_symbol (parse_t * self)
+{
+	assert (self != NULL);
+	
+	return index_get_size (self->map_sym);
+}
+
 char *
 parse_get_symbol (parse_t * self, size_t id)
 {
