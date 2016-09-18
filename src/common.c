@@ -124,6 +124,15 @@ vector_release (vector_t * self)
 }
 
 void
+vector_reset (vector_t * self)
+{
+	assert (self != NULL);
+	
+	void * data = vector_release (self);
+	free (data);
+}
+
+void
 vector_free (vector_t * self)
 {
 	if (self != NULL)
@@ -322,6 +331,15 @@ index_release (index_t * self)
 	index_free_pairs (self);
 	
 	return out;
+}
+
+void
+index_reset (index_t * self)
+{
+	assert (self != NULL);
+	
+	vector_reset (self->data);
+	index_free_pairs (self);
 }
 
 void

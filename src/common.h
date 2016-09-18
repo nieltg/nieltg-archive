@@ -31,7 +31,9 @@ bool    vector_is_elmt_id (vector_t * self, size_t id);
 void *  vector_id (vector_t * self, size_t id);
 
 void    vector_compact (vector_t * self);
+
 void *  vector_release (vector_t * self);
+void    vector_reset (vector_t * self);
 
 void    vector_free (vector_t * self);
 void    vector_clean (vector_t ** self);
@@ -52,6 +54,7 @@ size_t  index_get (index_t * self, char * val);
 bool    index_peek (index_t * self, char * value, size_t * out);
 
 char ** index_release (index_t * self);
+void    index_reset (index_t * self);
 
 void    index_free (index_t * self);
 void    index_clean (index_t ** self);
