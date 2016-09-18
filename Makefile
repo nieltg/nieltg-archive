@@ -15,7 +15,7 @@ OBJS := $(addprefix $(OBJ_DIR)/, common.o dfa.o main.o parse.o)
 # Tools
 
 LD := gcc
-CC := gcc -c
+CC := gcc -std=gnu99 -c
 
 APP := dfaexec
 
