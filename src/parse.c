@@ -21,10 +21,11 @@
 
 struct _parse_t
 {
-	size_t n_sym;
 	size_t n_state;
-	char ** sym;
 	char ** state;
+	
+	index_t * map_sym;
+	
 	char * flags;
 	
 	size_t first_id;
@@ -38,10 +39,9 @@ parse_alloc (void)
 {
 	parse_t * self = (parse_t *) malloc (sizeof (parse_t));
 	
-	self->n_sym = 0;
 	self->n_state = 0;
 	
-	self->sym = NULL;
+	self->map_sym = NULL;
 	self->state = NULL;
 	self->flags = NULL;
 	
@@ -59,18 +59,15 @@ process_sym (parse_t * self, char * buf)
 	char * tok_buf;
 	char * tok = strtok_r (buf, TOKEN_WS, &tok_buf);
 	
-	vector_t * vec = vector_alloc (sizeof (char *));
+	index_t * map = index_alloc ();
 	
 	while (tok != NULL)
 	{
-		vector_next(vec, char *) = strdup (tok);
+		index_get (map, tok);
 		tok = strtok_r (NULL, TOKEN_WS, &tok_buf);
 	}
-
-	self->n_sym = vector_get_size (vec);
-	self->sym = (char **) vector_release (vec);
 	
-	vector_clean (&vec);
+	self->map_sym = map;
 }
 
 static size_t
@@ -137,7 +134,9 @@ process_delta (parse_t * self, index_t * db_id, vector_t * db_f, size_t * dst_b,
 		}
 	}
 	
-	for (size_t i = 0; i < self->n_sym; i++)
+	size_t n_sym = index_get_size (self->map_sym);
+	
+	for (size_t i = 0; i < n_sym; i++)
 		dst_b[i] = index_get (db_id, dst[i]);
 	
 	vector(db_f, key_id, char) = flags;
@@ -160,14 +159,16 @@ parse_load (parse_t * self, FILE * input)
 	
 	// Process deltas
 	
-	dfa_free (self->dfa);
-	self->dfa = dfa_alloc (self->n_sym);
+	size_t n_sym = index_get_size (self->map_sym);
 	
-	size_t n_par = self->n_sym + 1;
-	size_t n_max = self->n_sym + 2;
+	dfa_free (self->dfa);
+	self->dfa = dfa_alloc (n_sym);
+	
+	size_t n_par = n_sym + 1;
+	size_t n_max = n_sym + 2;
 	
 	char ** row = (char **) malloc (n_max * sizeof (char *));
-	size_t * ic = (size_t *) malloc (self->n_sym * sizeof (size_t));
+	size_t * ic = (size_t *) malloc (n_sym * sizeof (size_t));
 	
 	index_t * db_id = index_alloc ();
 	vector_t * db_flag = vector_alloc (sizeof (char));
@@ -229,9 +230,18 @@ char *
 parse_get_symbol (parse_t * self, size_t id)
 {
 	assert (self != NULL);
-	assert (id < self->n_sym);
+	assert (id < index_get_size (self->map_sym));
 	
-	return self->sym[id];
+	return index_get_by_id (self->map_sym, id);
+}
+
+bool
+parse_get_symbol_id (parse_t * self, char * value, size_t * id)
+{
+	assert (self != NULL);
+	assert (value != NULL);
+	
+	return index_peek (self->map_sym, value, id);
 }
 
 dfa_t *
@@ -247,11 +257,7 @@ parse_free (parse_t * self)
 {
 	if (self != NULL)
 	{
-		for (size_t i = 0; i < self->n_sym; i++)
-			free (self->sym[i]);
-		
-		free (self->sym);
-		self->sym = NULL;
+		index_clean (&self->map_sym);
 		
 		for (size_t i = 0; i < self->n_state; i++)
 			free (self->state[i]);

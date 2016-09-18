@@ -29,7 +29,9 @@ size_t  parse_get_first_id (parse_t * self);
 
 char    parse_get_flags (parse_t * self, size_t id);
 char *  parse_get_state (parse_t * self, size_t id);
+
 char *  parse_get_symbol (parse_t * self, size_t id);
+bool    parse_get_symbol_id (parse_t * self, char * value, size_t * id);
 
 dfa_t * parse_get_dfa (parse_t * self);
 
