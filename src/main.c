@@ -20,11 +20,13 @@ print_header (parse_t * parse)
 {
 	size_t len;
 	
+	dfa_t * dfa = parse_get_dfa (parse);
+	
 	// States
 	
 	printf ("\nStates : ");
 	
-	len = parse_get_n_state (parse);
+	len = dfa_get_n_state (dfa);
 	
 	if (len > 0)
 	{
@@ -40,7 +42,7 @@ print_header (parse_t * parse)
 	
 	printf ("\nSymbols: ");
 	
-	len = parse_get_n_symbol (parse);
+	len = dfa_get_n_symbol (dfa);
 	
 	if (len > 0)
 	{
