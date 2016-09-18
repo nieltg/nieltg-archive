@@ -21,10 +21,8 @@
 
 struct _parse_t
 {
-	size_t n_state;
-	char ** state;
-	
 	index_t * map_sym;
+	index_t * map_state;
 	
 	char * flags;
 	
@@ -39,10 +37,8 @@ parse_alloc (void)
 {
 	parse_t * self = (parse_t *) malloc (sizeof (parse_t));
 	
-	self->n_state = 0;
-	
 	self->map_sym = NULL;
-	self->state = NULL;
+	self->map_state = NULL;
 	self->flags = NULL;
 	
 	self->first_id = 0;
@@ -189,12 +185,10 @@ parse_load (parse_t * self, FILE * input)
 			         program_invocation_short_name);
 	}
 	
-	self->n_state = index_get_size (db_id);
-	self->state = index_release (db_id);
+	index_free (self->map_state);
+	self->map_state = db_id;
 	
 	self->flags = (char *) vector_release (db_flag);
-	
-	index_clean (&db_id);
 	vector_clean (&db_flag);
 	
 	free (row);
@@ -213,7 +207,7 @@ char
 parse_get_flags (parse_t * self, size_t id)
 {
 	assert (self != NULL);
-	assert (id < self->n_state);
+	assert (id < index_get_size (self->map_state));
 	
 	return self->flags[id];
 }
@@ -230,9 +224,9 @@ char *
 parse_get_state (parse_t * self, size_t id)
 {
 	assert (self != NULL);
-	assert (id < self->n_state);
+	assert (id < index_get_size (self->map_state));
 	
-	return self->state[id];
+	return index_get_by_id (self->map_state, id);
 }
 
 size_t
@@ -275,12 +269,7 @@ parse_free (parse_t * self)
 	if (self != NULL)
 	{
 		index_clean (&self->map_sym);
-		
-		for (size_t i = 0; i < self->n_state; i++)
-			free (self->state[i]);
-		
-		free (self->state);
-		self->state = NULL;
+		index_clean (&self->map_state);
 		
 		free (self->flags);
 		self->flags = NULL;
