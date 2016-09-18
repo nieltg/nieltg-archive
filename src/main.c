@@ -87,7 +87,8 @@ do_program (parse_t * parse)
 		dfa_exec_push (dx, id);
 		cs = dfa_exec_get_state (dx);
 		
-		printf ("State: ", id);
+		// TODO: Use text as alphabet input
+		//printf ("State: ", id);
 		print_state (parse, cs);
 	}
 }
@@ -95,7 +96,7 @@ do_program (parse_t * parse)
 int
 main (int argc, char ** argv)
 {
-	char * o_path;
+	char * o_path = NULL;
 	
 	char opt_ch;
 	bool opt_fail = false;
