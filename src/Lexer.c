@@ -161,3 +161,39 @@ Lexer_Next (Lexer*  self)
 
 	return out;
 }
+
+const char*
+Token_Explain (char  tok_type)
+{
+	switch (tok_type)
+	{
+	case TOKEN_NAN:
+		return "TOKEN_NAN";
+
+	case TOKEN_END:
+		return "TOKEN_END";
+
+	case TOKEN_NUM:
+		return "TOKEN_NUM";
+
+	case TOKEN_ADD:
+		return "TOKEN_ADD";
+
+	case TOKEN_SUB:
+		return "TOKEN_SUB";
+
+	case TOKEN_MUL:
+		return "TOKEN_MUL";
+
+	case TOKEN_DIV:
+		return "TOKEN_DIV";
+
+	case TOKEN_L_P:
+		return "TOKEN_L_P";
+
+	case TOKEN_R_P:
+		return "TOKEN_R_P";
+	}
+
+	return "(invalid)";
+}

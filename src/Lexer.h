@@ -60,3 +60,9 @@ Lexer_Create (Lexer*       self,
 
 bool
 Lexer_Next (Lexer*  self);
+
+
+// Token
+
+const char*
+Token_Explain (char  tok_type);
