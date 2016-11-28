@@ -1,28 +1,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Lexer.h"
+#include "Parser.h"
 
 void
-do_calc (char*  buf)
+do_calc (const char*  buf)
 {
-	Lexer parse;
-	Lexer_Create (&parse, buf);
+	Parser parse;
+	Parser_Create (&parse);
 	
-	bool loop = true;
-	
-	while (loop && Lexer_Next (&parse))
-	{
-		Token* tok = &Lexer_Token(&parse);
-		
-		if (tok->type == TOKEN_NAN)
-			loop = false;
-		else
-		{
-			printf ("Token %c\n", tok->type);
-			printf (" val: %lf\n", tok->val);
-		}
-	}
+	if (Parser_Parse (&parse, buf))
+		printf ("%f\n", Parser_Value(&parse));
+	else
+		printf ("SINTAK ERROR\n");
 }
 
 int
