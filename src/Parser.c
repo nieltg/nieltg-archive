@@ -84,6 +84,9 @@ value (Parser*  self)
 		expect (self, TOKEN_R_P, NULL);
 	}
 	else
+	if (accept (self, TOKEN_SUB, NULL))
+		o = -1 * value (self);
+	else
 	{
 		Token tok;
 
