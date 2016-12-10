@@ -181,7 +181,7 @@ index_alloc (void)
 	index_t * self = (index_t *) malloc (sizeof (index_t));
 	
 	self->cap = DEFAULT_CAPACITY;
-	self->index = (index_pair_t **) calloc (self->cap, sizeof (index_pair_t));
+	self->index = (index_pair_t **) calloc (self->cap, sizeof (index_pair_t*));
 	
 	self->data = vector_alloc (sizeof (char *));
 	
