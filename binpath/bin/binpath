@@ -1,0 +1,60 @@
+#!/bin/bash
+
+test ! -d "${BINPAT_BIN}" && echo "$0: missing env: \$BINPAT_BIN" && exit 1
+test ! -d "${BINPAT_LIB}" && echo "$0: missing env: \$BINPAT_LIB" && exit 1
+test ! -d "${BINPAT_STO}" && echo "$0: missing env: \$BINPAT_STO" && exit 1
+
+moddir="${BINPAT_LIB}"/routines
+rts_usage=""
+
+key="$1"
+shift
+
+for mod in "$moddir"/*.sh; do
+	
+	# Load all routines.
+	source "$mod"
+	
+	for rt in "${BINPAT_R_LIST[@]}"; do
+		
+		if [ "$rt" = "$key" ]; then
+			
+			# Execute appropriate routine.
+			binpat_r_${rt}_parse "$@"
+			binpat_r_${rt}_exec
+			
+			# Jobs is done, exiting...
+			exit $?
+			
+		else
+			
+			# Store usage message of each commands.
+			v_usage=BINPAT_R_${rt}_USAGE
+			v_descr=BINPAT_R_${rt}_DESCR
+			
+			rts_usage+="${rt} ${!v_usage}"
+			rts_usage+=$'\t-\t'
+			rts_usage+="${!v_descr}"
+			rts_usage+=$'\n'
+			
+			unset v_usage v_descr
+		fi
+		
+	done
+	
+done
+
+# Not executing any routines...
+# So, show usage message.
+
+echo "BinPath 0.1 - Manage a list of bindirs to be plugged into \$PATH"
+echo "Usage: $0 [OPERATION-MODE] [PARAMS...]"
+echo
+echo "Available operation modes:"
+echo
+
+echo "$rts_usage" | column -t -s $'\t'
+
+# Return with exit-code.
+exit 1
+
