@@ -6,3 +6,7 @@
 
 .fuse_hidden*
 *~
+
+# Bochs
+
+bochsout.txt
