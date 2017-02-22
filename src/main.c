@@ -31,8 +31,6 @@ void print (int color, char* str)
 		
 		putInMemory (0xB000, 0x8000 + cursor++, *str++);
 		putInMemory (0xB000, 0x8000 + cursor++, color);
-		
-		delay ();
 	}
 }
 
