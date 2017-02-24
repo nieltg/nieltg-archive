@@ -61,7 +61,7 @@ $(FLOPPY_IMG): $(BOOTLD_OBJ) $(KERNEL_BIN)
 	@echo " dd: floppy.img <- $(BOOTLD_OBJ)"
 	@dd if=$(BOOTLD_OBJ) of=$@ bs=512 count=1 conv=notrunc seek=0 > /dev/null 2>&1
 	@echo " dd: floppy.img <- $(KERNEL_BIN)"
-	@dd if=$(KERNEL_BIN) of=$@ bs=512 count=1 conv=notrunc seek=3 > /dev/null 2>&1
+	@dd if=$(KERNEL_BIN) of=$@ bs=512 count=9 conv=notrunc seek=3 > /dev/null 2>&1
 
 $(KERNEL_BIN): $(MAIN_OBJ) $(LIBC_OBJ) $(OBJ_OBJS) | $(OUT_DIR)
 	@echo " link: $@"
