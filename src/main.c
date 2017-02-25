@@ -4,32 +4,26 @@
 
 #include "anim.h"
 #include "payload.h"
+#include "timer.h"
 #include "vga.h"
-
-void busy_wait (void)
-{
-	unsigned i, j;
-
-	for (i = 0; i < 32767; i++)
-		for (j = 0; j < 40; j++);
-}
 
 int kernel_main (void)
 {
 	vga_cursor_hide ();
 
-	vga_screen_write (0, 0, payload_bitmap);
+	vga_screen_write_all (0, 0, payload_bitmap, COLOR_BLACK);
 
 	anim_init ();
 	anim_render ();
 
-	while (1)
-	{
-		busy_wait ();
+	timer_init ();
+	kbd_init ();
 
-		anim_next ();
-		anim_render ();
-	}
+#asm
+_kernel_main_loop:
+	hlt
+	jmp     _kernel_main_loop
+#endasm
 
 	return 0;
 }
