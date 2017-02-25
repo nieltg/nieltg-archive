@@ -27,13 +27,13 @@ void vga_screen_set_color (size_t r, size_t c, char col)
 	putInMemory (0xB000, 0x8001 + i, col);
 }
 
-void vga_screen_write (size_t r, size_t c, char* str)
+void vga_screen_write_all (size_t r, size_t c, char* str, char col)
 {
 	size_t i = SCREEN_MEM_OFFSET (r, c);
 
 	while (*str)
 	{
-		putInMemory (0xB000, 0x8000 + i, *str++);
-		i += 2;
+		putInMemory (0xB000, 0x8000 + i++, *str++);
+		putInMemory (0xB000, 0x8000 + i++, col);
 	}
 }

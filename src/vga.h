@@ -36,6 +36,6 @@ void vga_cursor_set_location (size_t r, size_t c);
 void vga_screen_set_all (size_t r, size_t c, char ch, char col);
 void vga_screen_set_color (size_t r, size_t c, char col);
 
-void vga_screen_write (size_t r, size_t c, char* str);
+void vga_screen_write_all (size_t r, size_t c, char* str, char col);
 
 #endif
