@@ -22,7 +22,7 @@ char _anim_buf[SCREEN_ROW][SCREEN_COL];
 
 typedef struct
 {
-	unsigned r, c;
+	unsigned r, c, show;
 	unsigned speed, len;
 }
 drop_t;
@@ -35,7 +35,9 @@ void anim_init (void)
 
 	for (i = 0; i < DROPS_MAX; i++)
 	{
-		_anim_drop[i].r = 500;
+		_anim_drop[i].show = 0;
+
+		_anim_drop[i].r = prng_gen_range (0, 500);
 		_anim_drop[i].c = prng_gen_range (0, 500);
 
 		_anim_drop[i].speed = 5 + prng_gen_range (0, 20);
@@ -52,11 +54,10 @@ void anim_next (void)
 	{
 		if (_anim_drop[i].r > 500)
 		{
-			if (anim_is_enabled)
-			{
-				_anim_drop[i].r -= 500;
-				_anim_drop[i].c = prng_gen_range (0, 500);
-			}
+			_anim_drop[i].r -= 500;
+			_anim_drop[i].c = prng_gen_range (0, 500);
+
+			_anim_drop[i].show = anim_is_enabled;
 		}
 		else
 			_anim_drop[i].r += _anim_drop[i].speed;
@@ -72,7 +73,7 @@ int anim_is_idle (void)
 
 	for (i = 0; i < DROPS_MAX; i++)
 	{
-		if (_anim_drop[i].r <= 500)
+		if (_anim_drop[i].show)
 			return 0;
 	}
 
@@ -90,6 +91,9 @@ void anim_render (void)
 	for (i = 0; i < DROPS_MAX; i++)
 	{
 		unsigned nr, r, c;
+
+		if (!_anim_drop[i].show)
+			continue;
 
 		r = _anim_drop[i].r * (SCREEN_ROW + TRAIL_MAX) / 500;
 		c = _anim_drop[i].c * (SCREEN_COL) / 500;
