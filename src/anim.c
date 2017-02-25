@@ -6,11 +6,17 @@
 
 #include "anim.h"
 
+/*
+ * https://github.com/cacalabs/libcaca/blob/master/src/cacademo.c
+ */
+
 #define TRAIL_MIN (15)
 #define TRAIL_MAX (30)
 #define TRAIL_DELTA (TRAIL_MAX - TRAIL_MIN)
 
 #define DROPS_MAX  (SCREEN_COL * SCREEN_ROW / 8)
+
+int anim_is_enabled = 1;
 
 char _anim_buf[SCREEN_ROW][SCREEN_COL];
 
@@ -29,7 +35,7 @@ void anim_init (void)
 
 	for (i = 0; i < DROPS_MAX; i++)
 	{
-		_anim_drop[i].r = prng_gen_range (0, 500);
+		_anim_drop[i].r = 500;
 		_anim_drop[i].c = prng_gen_range (0, 500);
 
 		_anim_drop[i].speed = 5 + prng_gen_range (0, 20);
@@ -44,14 +50,33 @@ void anim_next (void)
 
 	for (i = 0; i < DROPS_MAX; i++)
 	{
-		_anim_drop[i].r += _anim_drop[i].speed;
-
 		if (_anim_drop[i].r > 500)
 		{
-			_anim_drop[i].r -= 500;
-			_anim_drop[i].c = prng_gen_range (0, 500);
+			if (anim_is_enabled)
+			{
+				_anim_drop[i].r -= 500;
+				_anim_drop[i].c = prng_gen_range (0, 500);
+			}
 		}
+		else
+			_anim_drop[i].r += _anim_drop[i].speed;
 	}
+}
+
+int anim_is_idle (void)
+{
+	int i;
+
+	if (anim_is_enabled)
+		return 0;
+
+	for (i = 0; i < DROPS_MAX; i++)
+	{
+		if (_anim_drop[i].r <= 500)
+			return 0;
+	}
+
+	return 1;
 }
 
 void anim_render (void)
@@ -60,11 +85,11 @@ void anim_render (void)
 
 	for (i = 0; i < SCREEN_ROW; i++)
 		for (j = 0; j < SCREEN_COL; j++)
-			_anim_buf[i][j] = COLOR_DARK_GREY;
+			_anim_buf[i][j] = COLOR_BLACK;
 
 	for (i = 0; i < DROPS_MAX; i++)
 	{
-		unsigned r, c;
+		unsigned nr, r, c;
 
 		r = _anim_drop[i].r * (SCREEN_ROW + TRAIL_MAX) / 500;
 		c = _anim_drop[i].c * (SCREEN_COL) / 500;
@@ -73,16 +98,21 @@ void anim_render (void)
 		{
 			if (r >= j)
 			{
-				if (j < 2)
-					_anim_buf[r - j][c] = COLOR_LIGHT_GREEN;
-				else
-				if (j < _anim_drop[i].len / 4)
-					_anim_buf[r - j][c] = COLOR_WHITE;
-				else
-				if (j < _anim_drop[i].len * 4 / 5)
-					_anim_buf[r - j][c] = COLOR_GREEN;
-				else
-					_anim_buf[r - j][c] = COLOR_LIGHT_GREY;
+				nr = r - j;
+
+				if (nr < SCREEN_ROW)
+				{
+					if (j < 2)
+						_anim_buf[nr][c] = COLOR_LIGHT_GREEN;
+					else
+					if (j < _anim_drop[i].len / 4)
+						_anim_buf[nr][c] = COLOR_WHITE;
+					else
+					if (j < _anim_drop[i].len * 4 / 5)
+						_anim_buf[nr][c] = COLOR_GREEN;
+					else
+						_anim_buf[nr][c] = COLOR_LIGHT_GREY;
+				}
 			}
 		}
 	}
