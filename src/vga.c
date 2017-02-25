@@ -9,7 +9,13 @@
 
 void vga_cursor_hide (void)
 {
-	/* TODO: implement vga_cursor_hide */
+	/*
+	 * http://forum.osdev.org/viewtopic.php?f=1&t=15669
+	 * http://osdever.net/FreeVGA/vga/crtcreg.htm
+	 */
+
+	outb (0x3D4, 0x0A);
+	outb (0x3D5, 0x20);
 }
 
 void vga_screen_set_all (size_t r, size_t c, char ch, char col)
