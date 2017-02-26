@@ -10,8 +10,6 @@ SRC_CTRL_DIR := $(SRC_DIR)/_ctrl
 
 FLOPPY_IMG := $(OUT_DIR)/floppy.img
 
-LIBC_OBJ := /usr/lib/bcc/libc_s.a
-
 BOOTLD_SRC := $(SRC_CTRL_DIR)/loader.asm
 
 BOOTLD_OBJ := \
@@ -63,7 +61,7 @@ $(FLOPPY_IMG): $(BOOTLD_OBJ) $(KERNEL_BIN)
 	@echo " dd: floppy.img <- $(KERNEL_BIN)"
 	@dd if=$(KERNEL_BIN) of=$@ bs=512 conv=notrunc seek=3 > /dev/null 2>&1
 
-$(KERNEL_BIN): $(MAIN_OBJ) $(LIBC_OBJ) $(OBJ_OBJS) | $(OUT_DIR)
+$(KERNEL_BIN): $(MAIN_OBJ) $(OBJ_OBJS) | $(OUT_DIR)
 	@echo " link: $@"
 	@$(LD) -o $@ $^
 
