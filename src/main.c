@@ -20,9 +20,9 @@ int kernel_main (void)
 	kbd_init ();
 
 #asm
-_kernel_main_loop:
+.loop:
 	hlt
-	jmp     _kernel_main_loop
+	jmp     .loop
 #endasm
 
 	return 0;

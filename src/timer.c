@@ -39,18 +39,18 @@ void timer_init (void)
 	push    ds
 	push    *0x0
 	pop     ds
-	mov     [0x20], #_timer_init_irq
+	mov     [0x20], #.irq
 	mov     [0x22], cs
 	sti
 	pop     ds
-	jmp     _timer_init_end
-_timer_init_irq:
+	jmp     .end
+.irq:
 	cli
 	pusha
 	call    __timer_irq_handler
 	popa
 	sti
 	iret
-_timer_init_end:
+.end:
 #endasm
 }

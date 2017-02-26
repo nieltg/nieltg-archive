@@ -28,18 +28,18 @@ void kbd_init (void)
 	push    *0x0
 	pop     ds
 	cli
-	mov     [0x24], #_kbd_init_irq
+	mov     [0x24], #.irq
 	mov     [0x26], cs
 	sti
 	pop     ds
-	jmp     _kbd_init_end
-_kbd_init_irq:
+	jmp     .end
+.irq:
 	cli
 	pusha
 	call    __kbd_irq_handler
 	popa
 	sti
 	iret
-_kbd_init_end:
+.end:
 #endasm
 }
