@@ -18,24 +18,16 @@ void _kbd_irq_handler (void)
 
 void kbd_init (void)
 {
-#asm
-	cli
-#endasm
-
 	/*
 	 * http://inglorion.net/documents/tutorials/x86ostut/keyboard
 	 * http://wiki.osdev.org/Interrupt_Vector_Table
 	 */
 
-	outb (0x43, 00110100b);
-
-	outb (0x40, 0xFF);
-	outb (0x40, 0xFF);
-
 #asm
 	push    ds
 	push    *0x0
 	pop     ds
+	cli
 	mov     [0x24], #_kbd_init_irq
 	mov     [0x26], cs
 	sti
