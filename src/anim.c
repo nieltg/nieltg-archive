@@ -107,15 +107,15 @@ void anim_render (void)
 				if (nr < SCREEN_ROW)
 				{
 					if (j < 2)
-						_anim_buf[nr][c] = COLOR_LIGHT_GREEN;
-					else
-					if (j < _anim_drop[i].len / 4)
 						_anim_buf[nr][c] = COLOR_WHITE;
 					else
-					if (j < _anim_drop[i].len * 4 / 5)
-						_anim_buf[nr][c] = COLOR_GREEN;
+					if (j < _anim_drop[i].len / 4)
+						_anim_buf[nr][c] = COLOR_LIGHT_CYAN;
 					else
-						_anim_buf[nr][c] = COLOR_LIGHT_GREY;
+					if (j < _anim_drop[i].len * 4 / 5)
+						_anim_buf[nr][c] = COLOR_CYAN;
+					else
+						_anim_buf[nr][c] = COLOR_DARK_GREY;
 				}
 			}
 		}
