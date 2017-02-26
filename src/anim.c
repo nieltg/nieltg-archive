@@ -14,7 +14,7 @@
 #define TRAIL_MAX (30)
 #define TRAIL_DELTA (TRAIL_MAX - TRAIL_MIN)
 
-#define DROPS_MAX  (SCREEN_COL * SCREEN_ROW / 4)
+#define DROPS_MAX  (SCREEN_COL * SCREEN_ROW / 8)
 
 int anim_is_enabled = 1;
 
