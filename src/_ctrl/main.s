@@ -3,7 +3,7 @@
 export _main
 _main:
 	call _kernel_main
+.loop:
 	cli
 	hlt
-.loop:
 	jmp .loop
