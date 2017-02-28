@@ -1,4 +1,9 @@
-/bin
+# Build
 
-.fuse_hidden*
-*~
+/bin/obj
+/bin/main
+/bin/test
+
+# Bench
+
+/out

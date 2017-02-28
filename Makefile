@@ -9,18 +9,18 @@ DRI_DIR := $(OUT_DIR)/test
 SRC_DIR := src
 SRC_DRI_DIR := test
 
-SRC_DIRS := $(shell find $(SRC_DIR) -type d 2> /dev/null)
-SRC_DRI_DIRS := $(shell find $(SRC_DRI_DIR) -type d 2> /dev/null)
+SRC_DIRS := $(shell find $(SRC_DIR) -type d)
+SRC_DRI_DIRS := $(shell find $(SRC_DRI_DIR) -type d)
 
-SRC_OBJS := $(shell find $(SRC_DIR) -name '*.cpp' -type f 2> /dev/null)
-SRC_DEFS := $(shell find $(SRC_DIR) -name '*.h' -type f 2> /dev/null)
+SRC_OBJS := $(shell find $(SRC_DIR) -name '*.cpp' -type f)
+SRC_DEFS := $(shell find $(SRC_DIR) -name '*.h' -type f)
 
 OBJ_DIRS := $(addprefix $(OBJ_DIR)/,$(SRC_DIRS) $(SRC_DRI_DIRS))
 OBJ_OBJS := $(addprefix $(OBJ_DIR)/,$(patsubst %.cpp,%.o,$(SRC_OBJS)))
 
 ifdef DRI_CUR
-DRI_SRCS := $(shell find $(DRI_CUR) -name '*.cpp' -type f 2> /dev/null)
-DRI_DEFS := $(shell find $(DRI_CUR) -name '*.h' -type f 2> /dev/null)
+DRI_SRCS := $(shell find $(DRI_CUR) -name '*.cpp' -type f)
+DRI_DEFS := $(shell find $(DRI_CUR) -name '*.h' -type f)
 DRI_OBJS := $(addprefix $(OBJ_DIR)/,$(patsubst %.cpp,%.o,$(DRI_SRCS)))
 
 DRI_OBJ_OBJS := \
@@ -29,7 +29,7 @@ endif
 
 # Tools
 
-CC_ARG_PRE := -Wall $(if $(DEBUG),-ggdb,-Ofast)
+CC_ARG_PRE := -Wall $(if $(DEBUG),-ggdb,-O2)
 CC_ARG_POS := -I$(SRC_DIR)
 
 LD := clang++ $(CC_ARG_PRE)
@@ -49,7 +49,7 @@ $(OUT_DIR)/$(APP): $(OBJ_OBJS)
 	@echo " link: $@"
 	@$(LD) -o $@ $^
 
-$(OUT_DIR) $(OBJ_DIRS) $(DRI_DIR):
+$(OBJ_DIRS) $(DRI_DIR):
 	@echo " mkdir: $@"
 	@mkdir -p $@
 
@@ -68,5 +68,9 @@ $(DRI_DIR)/%: $(SRC_DRI_DIR)/% $(OBJ_OBJS) FORCE | $(OBJ_DIRS)
 	@$(MAKE) --no-print-directory dri_helper DRI_OUT=$@ DRI_CUR=$<
 
 clean:
-	@echo " cleanup: $(OUT_DIR)"
-	@rm -rf $(OUT_DIR)
+	@echo " cleanup: $(OBJ_DIR)"
+	@rm -rf $(OBJ_DIR)
+	@echo " cleanup: $(OUT_DIR)/$(APP)"
+	@rm -rf $(OUT_DIR)/$(APP)
+	@echo " cleanup: $(DRI_DIR)"
+	@rm -rf $(DRI_DIR)
