@@ -1,9 +1,12 @@
 # Build
 
-/bin/obj
-/bin/main
-/bin/test
+/bin
+
+# Editor
+
+*~
 
 # Bench
 
 /out
+/out.txt
