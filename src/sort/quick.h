@@ -10,6 +10,7 @@
  * @brief Mengurutkan data menggunakan algoritma quick-sort.
  * @param  _first Penunjuk pertama pada data
  * @param  _last Penunjuk terakhir pada data
+ * @param  _func Fungsi komparasi
  */
 template
 	<class RandomAccessIterator,
