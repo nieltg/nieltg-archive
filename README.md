@@ -1,4 +1,4 @@
-# nieltg-tools
+# nieltg-archive
 
-This repository contains archive of small tools. It is recommended to do partial
+This repository contains archive of small repos. It is recommended to do partial
 checkout rather than full checkout.
