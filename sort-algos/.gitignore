@@ -1,0 +1,12 @@
+# Build
+
+/bin
+
+# Editor
+
+*~
+
+# Bench
+
+/out
+/out.txt
